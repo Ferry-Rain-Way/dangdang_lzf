@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.book.lzf.dao.UserMapper">
+    <select id="selectAllUser" resultType="user">
+        select id,email,password,salt,nickname nickName,status,code
+        from users
+    </select>
+
+    <update id="updateUserStatus">
+        update users set status=#{param1} where email = #{param2}
+    </update>
+</mapper>

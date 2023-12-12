@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.book.lzf.dao.CategoryMapper">
+<!--添加类别 void insertCategory(Category category);-->
+    <insert id="insertCategory" parameterType="category">
+        insert into category values(#{id},#{name},#{parentId},#{levels})
+    </insert>
+
+<!--通过id进行删除-->
+    <delete id="deleteCategory">
+        delete from category where id = #{id}
+    </delete>
+
+
+    <select id="selectAllCategory" resultMap="categoryResultMap">
+        select  c.id,c.name,c.parent_Id,c.levels,
+                p.id pid,p.name pname,p.parent_Id ppid,p.levels plevels
+        from  category c left join category p
+                                   on c.parent_id = p.id
+    </select>
+
+    <select id="selectFirstCategory" resultType="category">
+        select  id,name,parent_Id parentId,levels
+        from category
+        where parent_Id is null;
+    </select>
+
+    <select id="selectSecondCategoryByFirstId" resultType="category" parameterType="String">
+        select id,name,parent_id parentId ,levels
+        from category
+        where parent_id = #{id}
+    </select>
+
+    <resultMap id="categoryResultMap" type="category">
+        <id property="id" column="ID"/>
+        <result property="name" column="NAME"/>
+        <result property="parentId" column="PARENT_ID"/>
+        <result property="levels" column="LEVELS"/>
+        <association property="first" javaType="category">
+            <id property="id" column="pid"/>
+            <result property="name" column="pname"/>
+            <result property="parentId" column="ppid"/>
+            <result property="levels" column="plevels"/>
+        </association>
+    </resultMap>
+
+
+
+</mapper>
